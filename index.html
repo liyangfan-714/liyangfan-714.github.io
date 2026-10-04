@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>机械设计工程师作品集</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft Yahei",sans-serif;}
+        body{color:#f1f5f9;line-height:1.6;}
+        .container{width:90%;max-width:1200px;margin:0 auto;}
+
+        /* ========== 侧边目录菜单 ========== */
+        .side-menu{
+            position:fixed;
+            top:0;
+            left:0;
+            width:280px;
+            height:100vh;
+            background:#111827;
+            z-index:10000;
+            padding:30px 24px;
+            transform:translateX(-100%);
+            transition:transform 0.3s ease;
+        }
+        .side-menu.open{
+            transform:translateX(0);
+        }
+        .menu-close{
+            position:absolute;
+            top:20px;
+            right:20px;
+            font-size:30px;
+            color:#fff;
+            cursor:pointer;
+        }
+        .side-menu h3{
+            margin-bottom:24px;
+            font-size:22px;
+            color:#facc15;
+        }
+        .side-menu ul{
+            list-style:none;
+        }
+        .side-menu li{
+            margin-bottom:16px;
+        }
+        .side-menu a{
+            color:#cbd5e1;
+            text-decoration:none;
+            font-size:18px;
+            display:block;
+            padding:8px 0;
+        }
+        .side-menu a:hover{
+            color:#facc15;
+        }
+        /* 菜单遮罩 */
+        .menu-overlay{
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,0.5);
+            z-index:9999;
+            display:none;
+        }
+        .menu-overlay.show{
+            display:block;
+        }
+
+        /* ========== 首页背景图【可自定义图片与背景位置】 ========== */
+        .hero-bg{
+            background: url("assets/img/v6.png") center/cover no-repeat;
+            background-color:#0f172a;
+            background-blend-mode: overlay;
+            padding:80px 0;
+        }
+
+        /* ========== 顶部标题栏（左上角菜单按钮+名字） ========== */
+        .page-header{
+            background:#ffffff;
+            color:#111827;
+            padding:20px 0;
+            position:sticky;
+            top:0;
+            z-index:999;
+        }
+        .page-header .container{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+        .menu-toggle{
+            font-size:26px;
+            cursor:pointer;
+        }
+        .page-header .name-title{
+            font-size:28px;font-weight:bold;
+        }
+        .page-header .name-title span{
+            font-size:16px;color:#666;font-weight:normal;letter-spacing:2px;margin-left:12px;
+        }
+
+        /* ========== 首页英雄区域 ========== */
+        .hero-section{
+            padding:40px 0 20px 0;
+        }
+        .hero-section h1{
+            font-size:48px;
+            line-height:1.2;
+            margin-bottom:12px;
+        }
+        .hero-section .job-title{
+            font-size:26px;
+            color:#facc15;
+            margin-bottom:24px;
+        }
+        .text-yellow{
+            color:#facc15;
+        }
+        .hero-desc{
+            font-size:20px;
+            color:#cbd5e1;
+            margin-bottom:40px;
+        }
+        /* 首页两个按钮 */
+        .hero-buttons{
+            display:flex;
+            gap:24px;
+            flex-wrap:wrap;
+            margin-bottom:40px;
+        }
+        .btn-yellow{
+            background:#facc15;
+            color:#000;
+            font-weight:bold;
+            border:none;
+            padding:18px 40px;
+            border-radius:99px;
+            font-size:20px;
+            text-decoration:none;
+            cursor:pointer;
+        }
+        .btn-outline{
+            border:1px solid #cbd5e1;
+            color:#cbd5e1;
+            background:transparent;
+            padding:18px 40px;
+            border-radius:99px;
+            font-size:20px;
+            text-decoration:none;
+            cursor:pointer;
+        }
+
+        /* ========== 无限滚动能力展示栏（首页底部，不可点击） ========== */
+        .marquee-wrap{
+            overflow:hidden;
+            white-space:nowrap;
+            background:rgba(0,0,0,0.3);
+            padding:12px 0;
+            user-select:none;
+        }
+        .marquee-text{
+            display:inline-block;
+            animation: marquee 20s linear infinite;
+            font-size:18px;
+            color:#f1f5f9;
+        }
+        @keyframes marquee{
+            0%{transform: translateX(100%);}
+            100%{transform: translateX(-100%);}
+        }
+
+        /* ========== 栏目底色控制 ========== */
+        .section-dark{padding:70px 0;background:#0f172a;color:#f1f5f9;}
+        .section-white{padding:70px 0;background:#ffffff;color:#1e293b;}
+        .section-white .section-top p,.section-white .project-info p{color:#475569;}
+        .section-white .tag{background:#e2e8f0;color:#92400e;}
+        .section-dark2{padding:70px 0;background:#111827;color:#f1f5f9;}
+
+        .section-top{margin-bottom:40px;}
+        .section-top .num{color:#facc15;font-weight:bold;font-size:16px;}
+        .section-top h2{font-size:32px;margin:8px 0;}
+        .section-top p{color:#94a3b8;}
+
+        /* 项目卡片网格布局 */
+        .project-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:30px;}
+        .project-card{border-radius:12px;overflow:hidden;transition:0.3s;position:relative;cursor:pointer;}
+        .section-dark .project-card,.section-dark2 .project-card{background:#1e293b;}
+        .section-white .project-card{background:#f8fafc;box-shadow:0 2px 12px #00000015;}
+        .project-card:hover{transform:translateY(-8px);box-shadow:0 10px 30px #00000040;}
+
+        .video-btn{position:absolute;top:12px;left:12px;background:#facc15;color:#000;padding:4px 10px;border-radius:4px;font-size:13px;font-weight:bold;z-index:10;}
+        .no-video-tag{position:absolute;top:12px;left:12px;background:#22c55e;color:#000;padding:4px 10px;border-radius:4px;font-size:13px;font-weight:bold;z-index:10;}
+        .project-thumb{width:100%;height:220px;overflow:hidden;}
+        .project-thumb img{width:100%;height:100%;object-fit:cover;transition:0.5s;}
+        .project-card:hover .project-thumb img{transform:scale(1.05);}
+
+        .project-info{padding:20px;}
+        .project-info h3{font-size:20px;margin-bottom:12px;}
+        .project-info p{font-size:14px;margin-bottom:15px;}
+        .tag-group{display:flex;flex-wrap:wrap;gap:8px;}
+        .tag{background:#334155;padding:3px 10px;border-radius:20px;font-size:12px;color:#facc15;}
+
+        /* ========== 项目弹窗 ========== */
+        .project-modal{
+            display:none;
+            position:fixed;
+            z-index:9999;
+            left:0;top:0;
+            width:100%;height:100%;
+            background:rgba(0,0,0,0.85);
+            overflow:auto;
+            padding:40px 20px;
+        }
+        .modal-content{
+            background:#111827;
+            max-width:900px;
+            margin:0 auto;
+            border-radius:14px;
+            padding:24px;
+            position:relative;
+        }
+        .close-modal{
+            position:absolute;
+            right:20px;top:16px;
+            font-size:32px;color:#fff;
+            cursor:pointer;
+        }
+        .video-wrap{
+            width:100%;
+            aspect-ratio:16/9;
+            margin-bottom:24px;
+        }
+        .video-wrap iframe{
+            width:100%;height:100%;border-radius:8px;border:none;
+        }
+        .modal-desc{
+            font-size:16px;
+            line-height:1.8;
+        }
+        .modal-desc p{margin-bottom:16px;}
+        .desc-img{
+            width:100%;
+            border-radius:8px;
+            margin:12px 0;
+        }
+        /* ✅ 双排图集，手机自动单列 */
+        .img-gallery{
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:14px;
+            margin:20px 0;
+        }
+        .img-gallery img{
+            width:100%;
+            border-radius:8px;
+            object-fit:cover;
+        }
+        @media (max-width:640px){
+            .img-gallery{
+                grid-template-columns:1fr;
+            }
+        }
+
+        /* ========== 证书板块样式 ========== */
+        .cert-section{padding:70px 0;background:#0f172a;color:#f1f5f9;}
+        .cert-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:30px;}
+        .cert-card{border-radius:12px;overflow:hidden;transition:0.3s;position:relative;cursor:pointer;background:#1e293b;}
+        .cert-card:hover{transform:translateY(-8px);box-shadow:0 10px 30px #00000040;}
+        .cert-thumb{width:100%;height:220px;overflow:hidden;}
+        .cert-thumb img{width:100%;height:100%;object-fit:cover;transition:0.5s;}
+        .cert-card:hover .cert-thumb img{transform:scale(1.05);}
+        .cert-info{padding:20px;}
+        .cert-info h3{font-size:20px;margin-bottom:12px;}
+        .cert-info p{font-size:14px;color:#94a3b8;}
+
+        /* ========== 证书大图弹窗 ========== */
+        .cert-modal{
+            display:none;
+            position:fixed;
+            z-index:9999;
+            left:0;top:0;
+            width:100%;height:100%;
+            background:rgba(0,0,0,0.85);
+            overflow:auto;
+            padding:40px 20px;
+        }
+        .cert-modal-content{
+            background:#111827;
+            max-width:800px;
+            margin:0 auto;
+            border-radius:14px;
+            padding:24px;
+            position:relative;
+        }
+        .close-cert{
+            position:absolute;
+            right:20px;top:16px;
+            font-size:32px;color:#fff;
+            cursor:pointer;
+        }
+        .cert-preview-img{
+            width:100%;
+            border-radius:8px;
+        }
+
+        /* ========== 简历预览弹窗 ========== */
+        .resume-modal{
+            display:none;
+            position:fixed;
+            z-index:9999;
+            left:0;top:0;
+            width:100%;height:100%;
+            background:rgba(0,0,0,0.85);
+            overflow:auto;
+            padding:40px 20px;
+        }
+        .resume-modal-content{
+            background:#fff;
+            max-width:800px;
+            margin:0 auto;
+            border-radius:14px;
+            padding:24px;
+            position:relative;
+            color:#111827;
+        }
+        .close-resume{
+            position:absolute;
+            right:20px;top:16px;
+            font-size:32px;color:#000;
+            cursor:pointer;
+        }
+        .resume-pdf{
+            width:100%;
+            height:70vh;
+            border:none;
+        }
+
+        /* ========== 底部联系模块 ========== */
+        .contact-section{
+            background:#0f172a;
+            padding:70px 0;
+        }
+        .contact-section h2{
+            font-size:48px;
+            line-height:1.2;
+            margin-bottom:24px;
+        }
+        .contact-desc{
+            font-size:20px;
+            color:#cbd5e1;
+            margin-bottom:40px;
+        }
+        .contact-buttons{
+            display:flex;
+            gap:24px;
+            flex-wrap:wrap;
+            margin-bottom:48px;
+        }
+        .contact-card-wrap{
+            display:grid;
+            gap:16px;
+        }
+        .contact-card{
+            background:#1e293b;
+            padding:24px 28px;
+            border-radius:14px;
+            display:flex;
+            align-items:center;
+            gap:20px;
+        }
+        .contact-icon{
+            color:#facc15;
+            font-size:24px;
+            width:36px;
+        }
+        .contact-label{
+            color:#94a3b8;
+            font-size:14px;
+            letter-spacing:1px;
+        }
+        .contact-value{
+            font-size:22px;
+        }
+
+        footer{text-align:center;padding:40px 0;color:#64748b;font-size:14px;background:#0f172a;}
+        html{scroll-behavior:smooth;}
+    </style>
+</head>
+<body>
+    <!-- ========== 侧边目录菜单 ========== -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+    <div class="side-menu" id="sideMenu">
+        <span class="menu-close" onclick="closeMenu()">&times;</span>
+        <h3>目录导航</h3>
+        <ul>
+            <li><a href="#top" onclick="closeMenu()">首页</a></li>
+            <li><a href="#part1" onclick="closeMenu()">非标机构设计</a></li>
+            <li><a href="#part2" onclick="closeMenu()">SolidWorks建模</a></li>
+            <li><a href="#part3" onclick="closeMenu()">工程图与BOM</a></li>
+            <li><a href="#cert" onclick="closeMenu()">证书展示</a></li>
+            <li><a href="#contact" onclick="closeMenu()">联系我</a></li>
+        </ul>
+    </div>
+
+    <!-- ========== 页面最顶部白色导航栏 ========== -->
+    <div class="page-header">
+        <div class="container">
+            <div class="menu-toggle" onclick="openMenu()">☰</div>
+            <div class="name-title">李洋帆 <span>PORTFOLIO</span></div>
+        </div>
+    </div>
+
+    <!-- ========== 首页英雄区域 ========== -->
+    <div class="hero-bg" id="top">
+        <div class="container hero-section">
+            <h1>李洋帆</h1>
+            <div class="job-title">机械设计工程师</div>
+            <p class="hero-desc">
+                非标自动化机构设计 | SolidWorks三维建模 | 工程图与BOM清单编制
+            </p>
+            <div class="hero-buttons">
+                <a href="#works" class="btn-yellow">查看作品集</a>
+                <button class="btn-outline" onclick="openResumeModal()">预览简历</button>
+            </div>
+        </div>
+        <div class="marquee-wrap">
+            <div class="marquee-text">
+                ✦ SolidWorks ✦ 非标机构设计 ✦ 丝杆导轨选型 ✦ 工程图绘制 ✦ BOM编制 ✦ 受力校核 ✦ 设备装配 ✦ 三维渲染 ✦
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== 作品集总容器 id="works" ========== -->
+    <div id="works">
+        <!-- ============================================== -->
+        <!-- 01 栏目：非标机构设计（保留视频版不变） -->
+        <!-- ============================================== -->
+        <section id="part1" class="section-dark">
+            <div class="container">
+                <div class="section-top">
+                    <div class="num">01 · NONSTANDARD MECHANISM</div>
+                    <h2>非标机构设计</h2>
+                    <p>独立完成输送、夹紧、升降类非标自动化机构方案设计、结构布局、丝杆导轨电机选型，完成整套传动方案设计。</p>
+                </div>
+                <div class="project-grid">
+                    <div class="project-card" onclick="openModal('modal1')">
+                        <div class="video-btn">点击查看详情</div>
+                        <div class="project-thumb">
+                            <img src="assets/img/2.png" alt="非标输送夹紧机构">
+                        </div>
+                        <div class="project-info">
+                            <h3>非标自动化输送夹紧机构</h3>
+                            <p>根据工况完成结构布局，完成丝杆、直线导轨、电机选型，确定传动方案。</p>
+                            <div class="tag-group">
+                                <span class="tag">非标结构</span>
+                                <span class="tag">传动方案</span>
+                                <span class="tag">标准件选型</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-modal" id="modal1">
+                        <div class="modal-content">
+                            <span class="close-modal" onclick="closeModal('modal1')">&times;</span>
+                            <div class="video-wrap">
+                                <iframe src="https://player.bilibili.com/player.html?bvid=BV1xx411c7mZ&autoplay=0" width="100%" height="100%" frameborder="0" allowfullscreen allow="encrypted-media"></iframe>
+                            </div>
+                            <div class="modal-desc">
+                                <h3>非标自动化输送夹紧机构</h3>
+                                <p>项目简介：用于工件输送定位夹紧，完成整体方案概念设计、受力分析、标准件选型校核。</p>
+                                <img class="desc-img" src="assets/img/2.png" alt="机构三维装配图">
+                                <p>设计要点：选用滚珠丝杆+直线导轨实现精准输送，气缸夹紧定位，完成干涉检查，输出全套零件清单BOM。</p>
+                                <p>选型计算：丝杆载荷校核、电机扭矩转速计算，验证机构满足生产节拍要求。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 新增项目1 -->
+                    <div class="project-card" onclick="openModal('modal4')">
+                        <div class="video-btn">点击查看详情</div>
+                        <div class="project-thumb">
+                            <img src="assets/img/sel.png" alt="伺服‑丝杆输送单元选型校核">
+                        </div>
+                        <div class="project-info">
+                            <h3>伺服‑丝杆输送单元选型校核</h3>
+                            <p>完成运动参数、负载、摩擦、加速惯量计算，匹配电机、减速器与丝杆规格，校验安全系数。</p>
+                            <div class="tag-group">
+                                <span class="tag">伺服选型</span>
+                                <span class="tag">惯量校核</span>
+                                <span class="tag">丝杆传动</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-modal" id="modal4">
+                        <div class="modal-content">
+                            <span class="close-modal" onclick="closeModal('modal4')">&times;</span>
+                            <div class="video-wrap">
+                                <iframe src="https://player.bilibili.com/player.html?bvid=BV1xx411c7mZ&autoplay=0" width="100%" height="100%" frameborder="0" allowfullscreen allow="encrypted-media"></iframe>
+                            </div>
+                            <div class="modal-desc">
+                                <h3>伺服‑丝杆输送单元选型校核</h3>
+                                <p>项目简介：水平输送工位完整传动链计算，用于确定伺服电机与滚珠丝杆参数。</p>
+                                <img class="desc-img" src="assets/img/sel.png" alt="选型计算书示意">
+                                <p>计算内容：总负载重量、摩擦力、加速时间‑加速度、丝杆导程换算转速、各零件转动惯量叠加、负载/电机惯量比校验、扭矩安全系数验算。</p>
+                                <p>参考选型库：怡合达、嘉立创FA标准样本，输出可直接采购规格型号。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 新增项目2 -->
+                    <div class="project-card" onclick="openModal('modal5')">
+                        <div class="video-btn">点击查看详情</div>
+                        <div class="project-thumb">
+                            <img src="assets/img/sim.png" alt="多工位联动机构运动仿真">
+                        </div>
+                        <div class="project-info">
+                            <h3>多工位联动机构运动仿真与调优</h3>
+                            <p>通过SolidWorks运动算例模拟完整动作时序，提前排查死点、干涉问题，指导现场调试优化。</p>
+                            <div class="tag-group">
+                                <span class="tag">运动算例</span>
+                                <span class="tag">时序验证</span>
+                                <span class="tag">机构调优</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-modal" id="modal5">
+                        <div class="modal-content">
+                            <span class="close-modal" onclick="closeModal('modal5')">&times;</span>
+                            <div class="video-wrap">
+                                <iframe src="https://player.bilibili.com/player.html?bvid=BV1xx411c7mZ&autoplay=0" width="100%" height="100%" frameborder="0" allowfullscreen allow="encrypted-media"></iframe>
+                            </div>
+                            <div class="modal-desc">
+                                <h3>多工位联动机构运动仿真与调优</h3>
+                                <p>项目简介：针对往复‑夹紧‑出料联动机构做动作时序仿真，降低实物试错成本。</p>
+                                <img class="desc-img" src="assets/img/sim.png" alt="运动仿真截图">
+                                <p>工作要点：设置马达驱动与限位条件，输出位移‑速度曲线；识别初始设计干涉位置，修改摆臂长度、安装位置后重新验证；跟进装配调试，优化气缸缓冲与感应开关位置以满足产线节拍。</p>
+                                <p>可输出：仿真动画、优化后三维模型、BOM变更清单。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- 02 栏目：SolidWorks建模（纯图片双排图集） -->
+        <!-- ============================================== -->
+        <section id="part2" class="section-white">
+            <div class="container">
+                <div class="section-top">
+                    <div class="num">02 · SOLIDWORKS MODELING</div>
+                    <h2>SolidWorks建模</h2>
+                    <p>使用SolidWorks完成零件特征建模、整机装配、干涉检查、模型渲染，输出完整三维模型文件。</p>
+                </div>
+                <div class="project-grid">
+                    <div class="project-card" onclick="openModal('modal2')">
+                        <div class="video-btn">点击查看详情</div>
+                        <div class="project-thumb">
+                            <img src="assets/img/gun.png" alt="三维装配模型">
+                        </div>
+                        <div class="project-info">
+                            <h3>多零件机构三维装配建模</h3>
+                            <p>完成零件拉伸、切除、阵列等特征建模，整机装配，间隙校核与干涉检查。</p>
+                            <div class="tag-group">
+                                <span class="tag">SolidWorks</span>
+                                <span class="tag">零件建模</span>
+                                <span class="tag">整机装配</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-modal" id="modal2">
+                        <div class="modal-content">
+                            <span class="close-modal" onclick="closeModal('modal2')">&times;</span>
+                            <div class="video-wrap">
+                                <iframe src="https://player.bilibili.com/player.html?bvid=BV1xx411c7mZ&autoplay=0" width="100%" height="100%" frameborder="0" allowfullscreen allow="encrypted-media"></iframe>
+                            </div>
+                            <div class="modal-desc">
+                                <h3>多零件机构三维装配建模</h3>
+                                <p>项目简介：整套非标设备零件建模与虚拟装配，包含机加工件、型材、标准件。</p>
+                                <img class="desc-img" src="assets/img/gun.png" alt="整机装配渲染图">
+                                <p>工作内容：草图绘制、实体建模、装配约束，使用SolidWorks干涉检查功能排查结构碰撞问题。</p>
+                                <p>输出文件：零件sldprt、装配体sldasm，可直接用于工程图出图。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-card" onclick="openModal('modal6')">
+                        <div class="no-video-tag">图集展示</div>
+                        <div class="project-thumb">
+                            <img src="assets/img/mode_01.jpg" alt="多品类零件与设备建模合集">
+                        </div>
+                        <div class="project-info">
+                            <h3>多品类零件与设备建模合集</h3>
+                            <p>包含不同类型传动零件、工装治具、小型整机完整建模流程与渲染成果，无视频。</p>
+                            <div class="tag-group">
+                                <span class="tag">特征建模</span>
+                                <span class="tag">装配布局</span>
+                                <span class="tag">视觉渲染</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-modal" id="modal6">
+                        <div class="modal-content">
+                            <span class="close-modal" onclick="closeModal('modal6')">&times;</span>
+                            <div class="modal-desc">
+                                <h3>多品类零件与设备建模合集</h3>
+                                <p>本合集收录15组不同工况下的SolidWorks建模与渲染成果，覆盖传动件、工装、小型自动化单元，完整体现草图‑特征‑装配‑出图前全流程能力。</p>
+                                <div class="img-gallery">
+                                    <img src="assets/img/mode_01.jpg" alt="建模图1">
+                                    <img src="assets/img/mode_02.jpg" alt="建模图2">
+                                    <img src="assets/img/mode_03.jpg" alt="建模图3">
+                                    <img src="assets/img/mode_04.jpg" alt="建模图4">
+                                    <img src="assets/img/mode_05.jpg" alt="建模图5">
+                                    <img src="assets/img/mode_06.jpg" alt="建模图6">
+                                    <img src="assets/img/mode_07.jpg" alt="建模图7">
+                                    <img src="assets/img/mode_08.jpg" alt="建模图8">
+                                    <img src="assets/img/mode_09.jpg" alt="建模图9">
+                                    <img src="assets/img/mode_10.jpg" alt="建模图10">
+                                    <img src="assets/img/mode_11.jpg" alt="建模图11">
+                                    <img src="assets/img/mode_12.jpg" alt="建模图12">
+                                    <img src="assets/img/mode_13.jpg" alt="建模图13">
+                                    <img src="assets/img/mode_14.jpg" alt="建模图14">
+                                    <img src="assets/img/mode_15.jpg" alt="建模图15">
+                                </div>
+                                <p>建模要点：合理规划特征树、避免过度定义、装配优先使用基准参考、完成干涉与间隙检查，模型可直接用于后续工程图与运动仿真。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- 03 栏目：工程图与BOM → 改成【无视频、纯双排图集】 -->
+        <!-- ============================================== -->
+        <section id="part3" class="section-dark2">
+            <div class="container">
+                <div class="section-top">
+                    <div class="num">03 · DRAWING & BOM</div>
+                    <h2>工程图与BOM清单</h2>
+                    <p>按照国标机械制图绘制零件图、装配图，标注尺寸公差、形位公差，整理BOM物料清单。</p>
+                </div>
+                <div class="project-grid">
+                    <div class="project-card" onclick="openModal('modal3')">
+                        <div class="no-video-tag">图集展示</div>
+                        <div class="project-thumb">
+                            <img src="assets/img/v6.png" alt="工程图BOM合集">
+                        </div>
+                        <div class="project-info">
+                            <h3>整套工程图绘制与BOM物料清单</h3>
+                            <p>规范绘制二维工程图纸，完成尺寸、粗糙度、公差标注，统计全部零件规格数量。</p>
+                            <div class="tag-group">
+                                <span class="tag">机械制图</span>
+                                <span class="tag">尺寸公差</span>
+                                <span class="tag">BOM清单</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-modal" id="modal3">
+                        <div class="modal-content">
+                            <span class="close-modal" onclick="closeModal('modal3')">&times;</span>
+                            <div class="modal-desc">
+                                <h3>整套工程图绘制与BOM物料清单合集</h3>
+                                <p>收录多套零件图、装配图、BOM表输出案例；严格遵循国标标注规范，包含尺寸链、形位公差、表面粗糙度与技术要求，可直接用于机加工采购。</p>
+                                <div class="img-gallery">
+                                    <img src="assets/img/dwg_01.jpg" alt="工程图1">
+                                    <img src="assets/img/dwg_02.jpg" alt="工程图2">
+                                    <img src="assets/img/dwg_03.jpg" alt="工程图3">
+                                    <img src="assets/img/dwg_04.jpg" alt="工程图4">
+                                    <img src="assets/img/dwg_05.jpg" alt="工程图5">
+                                    <img src="assets/img/dwg_06.jpg" alt="工程图6">
+                                </div>
+                                <p>工作要点：视图布局合理、公差匹配实际加工工艺、区分自制件/外购件、BOM层级清晰，减少车间沟通误差。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- 证书展示板块 -->
+        <!-- ============================================== -->
+        <section id="cert" class="cert-section">
+            <div class="container">
+                <div class="section-top">
+                    <div class="num">04 · CERTIFICATE</div>
+                    <h2>证书展示</h2>
+                    <p>个人技能认证与资格证书，点击卡片查看证书大图。</p>
+                </div>
+                <div class="cert-grid">
+                    <div class="cert-card" onclick="openCertModal('assets/img/cert_cswp.jpg','CSWP SolidWorks认证专家证书')">
+                        <div class="cert-thumb">
+                            <img src="assets/img/cert_cswp.jpg" alt="CSWP证书">
+                        </div>
+                        <div class="cert-info">
+                            <h3>CSWP</h3>
+                            <p>SolidWorks认证专家</p>
+                        </div>
+                    </div>
+                    <div class="cert-card" onclick="openCertModal('assets/img/cert_driver.jpg','C1机动车驾驶证')">
+                        <div class="cert-thumb">
+                            <img src="assets/img/cert_driver.jpg" alt="C1驾驶证">
+                        </div>
+                        <div class="cert-info">
+                            <h3>C1驾驶证</h3>
+                            <p>机动车C类驾驶执照</p>
+                        </div>
+                    </div>
+                    <div class="cert-card" onclick="openCertModal('assets/img/cert_repair.jpg','汽车维修工职业技能证书')">
+                        <div class="cert-thumb">
+                            <img src="assets/img/cert_repair.jpg" alt="汽车维修工证书">
+                        </div>
+                        <div class="cert-info">
+                            <h3>汽车维修工</h3>
+                            <p>汽车维修职业技能认证</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ========== 联系模块 ========== -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <h2>期待与你的产线<br>一起<span class="text-yellow">跑起来</span></h2>
+            <p class="contact-desc">
+                如果你在找一位能做非标机构、会SolidWorks建模、能绘制工程图整理BOM的机械设计新人——我随时可以聊聊。
+            </p>
+            <div class="contact-buttons">
+                <a href="resume.pdf" download class="btn-yellow">下载简历</a>
+                <a href="mailto:你的邮箱@qq.com" class="btn-outline">发邮件给我</a>
+            </div>
+            <div class="contact-card-wrap">
+                <div class="contact-card">
+                    <div class="contact-icon">✉</div>
+                    <div>
+                        <div class="contact-label">EMAIL · 邮箱</div>
+                        <div class="contact-value">1302021014@qq.com</div>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">☎</div>
+                    <div>
+                        <div class="contact-label">PHONE · 电话</div>
+                        <div class="contact-value">18382908834</div>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">📍</div>
+                    <div>
+                        <div class="contact-label">BASE · 现居</div>
+                        <div class="contact-value">四川德阳</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        李洋帆机械设计个人作品集
+    </footer>
+
+    <!-- ========== 证书弹窗DOM ========== -->
+    <div class="cert-modal" id="certModal">
+        <div class="cert-modal-content">
+            <span class="close-cert" onclick="closeCertModal()">&times;</span>
+            <h3 id="certModalTitle" style="margin-bottom:20px;"></h3>
+            <img class="cert-preview-img" id="certModalImg" src="" alt="证书大图">
+        </div>
+    </div>
+
+    <!-- ========== 简历预览弹窗DOM ========== -->
+    <div class="resume-modal" id="resumeModal">
+        <div class="resume-modal-content">
+            <span class="close-resume" onclick="closeResumeModal()">&times;</span>
+            <iframe class="resume-pdf" src="resume.pdf"></iframe>
+        </div>
+    </div>
+
+    <!-- ========== JS控制代码 ========== -->
+    <script>
+        function openMenu(){
+            document.getElementById("sideMenu").classList.add("open");
+            document.getElementById("menuOverlay").classList.add("show");
+            document.body.style.overflow = "hidden";
+        }
+        function closeMenu(){
+            document.getElementById("sideMenu").classList.remove("open");
+            document.getElementById("menuOverlay").classList.remove("show");
+            document.body.style.overflow = "";
+        }
+        document.getElementById("menuOverlay").onclick = closeMenu;
+
+        function openModal(modalId){
+            document.getElementById(modalId).style.display = "block";
+            document.body.style.overflow = "hidden";
+        }
+        function closeModal(modalId){
+            const modal = document.getElementById(modalId);
+            modal.style.display = "none";
+            document.body.style.overflow = "";
+            const iframe = modal.querySelector("iframe");
+            if(iframe){
+                let src = iframe.src;
+                iframe.src = src;
+            }
+        }
+
+        function openCertModal(imgSrc, titleText){
+            document.getElementById("certModalTitle").innerText = titleText;
+            document.getElementById("certModalImg").src = imgSrc;
+            document.getElementById("certModal").style.display = "block";
+            document.body.style.overflow = "hidden";
+        }
+        function closeCertModal(){
+            document.getElementById("certModal").style.display = "none";
+            document.body.style.overflow = "";
+        }
+
+        function openResumeModal(){
+            document.getElementById("resumeModal").style.display = "block";
+            document.body.style.overflow = "hidden";
+        }
+        function closeResumeModal(){
+            document.getElementById("resumeModal").style.display = "none";
+            document.body.style.overflow = "";
+        }
+
+        window.onclick = function(event) {
+            if(event.target.classList.contains("project-modal")){
+                closeModal(event.target.id);
+            }
+            if(event.target.classList.contains("resume-modal")){
+                closeResumeModal();
+            }
+            if(event.target.classList.contains("cert-modal")){
+                closeCertModal();
+            }
+        }
+    </script>
+</body>
+</html>  
