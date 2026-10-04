@@ -384,9 +384,27 @@
 
         footer{text-align:center;padding:40px 0;color:#64748b;font-size:14px;background:#0f172a;}
         html{scroll-behavior:smooth;}
+
+        /* ========== 复制成功提示弹窗【新增样式】 ========== */
+        .toast{
+            position:fixed;
+            bottom:40px;
+            left:50%;
+            transform:translateX(-50%);
+            background:#22c55e;
+            color:#fff;
+            padding:12px 24px;
+            border-radius:8px;
+            font-size:16px;
+            z-index:99999;
+            display:none;
+        }
     </style>
 </head>
 <body>
+    <!-- ========== 复制成功提示框【新增DOM】 ========== -->
+    <div class="toast" id="toastTip">邮箱已复制到剪贴板！</div>
+
     <!-- ========== 侧边目录菜单 ========== -->
     <div class="menu-overlay" id="menuOverlay"></div>
     <div class="side-menu" id="sideMenu">
@@ -433,7 +451,7 @@
     <!-- ========== 作品集总容器 id="works" ========== -->
     <div id="works">
         <!-- ============================================== -->
-        <!-- 01 栏目：非标机构设计（保留视频版不变） -->
+        <!-- 01 栏目：非标机构设计（改回原始BV） -->
         <!-- ============================================== -->
         <section id="part1" class="section-dark">
             <div class="container">
@@ -443,6 +461,7 @@
                     <p>独立完成输送、夹紧、升降类非标自动化机构方案设计、结构布局、丝杆导轨电机选型，完成整套传动方案设计。</p>
                 </div>
                 <div class="project-grid">
+                    <!-- 移载机构 BV1qEa166Eqn -->
                     <div class="project-card" onclick="openModal('modal1')">
                         <div class="video-btn">点击查看详情</div>
                         <div class="project-thumb">
@@ -474,7 +493,7 @@
                         </div>
                     </div>
 
-                    <!-- 新增项目1 -->
+                    <!-- 翻转输送机构 BV1qEa16zEGv -->
                     <div class="project-card" onclick="openModal('modal4')">
                         <div class="video-btn">点击查看详情</div>
                         <div class="project-thumb">
@@ -506,7 +525,7 @@
                         </div>
                     </div>
 
-                    <!-- 新增项目2 -->
+                    <!-- 滚筒输送机 BV1qEa16zEGv -->
                     <div class="project-card" onclick="openModal('modal5')">
                         <div class="video-btn">点击查看详情</div>
                         <div class="project-thumb">
@@ -526,7 +545,7 @@
                         <div class="modal-content">
                             <span class="close-modal" onclick="closeModal('modal5')">&times;</span>
                             <div class="video-wrap">
-                                <iframe src="https://player.bilibili.com/player.html?bvid=BV163a165Ezn&autoplay=0" width="100%" height="100%" frameborder="0" allowfullscreen allow="encrypted-media"></iframe>
+                                <iframe src="https://player.bilibili.com/player.html?bvid=BV1qEa16zEGv&autoplay=0" width="100%" height="100%" frameborder="0" allowfullscreen allow="encrypted-media"></iframe>
                             </div>
                             <div class="modal-desc">
                                 <h3>滚筒输送机</h3>
@@ -731,7 +750,8 @@
             </p>
             <div class="contact-buttons">
                 <a href="resume.pdf" download class="btn-yellow">下载简历</a>
-                <a href="mailto:1302021014@qq.com" class="btn-outline">发邮件给我</a>
+                <!-- 修改：a标签改为button，点击执行复制邮箱函数 -->
+                <button class="btn-outline" onclick="copyEmail()">发邮件给我</button>
             </div>
             <div class="contact-card-wrap">
                 <div class="contact-card">
@@ -840,6 +860,26 @@
                 closeCertModal();
             }
         }
+
+        // ========== 新增：复制邮箱函数 ==========
+        async function copyEmail(){
+            const email = "1302021014@qq.com";
+            try{
+                await navigator.clipboard.writeText(email);
+                showToast("邮箱已复制到剪贴板！");
+            }catch(err){
+                showToast("复制失败，请手动复制邮箱");
+            }
+        }
+        // ========== 新增：底部提示弹窗函数 ==========
+        function showToast(msg){
+            const toast = document.getElementById("toastTip");
+            toast.innerText = msg;
+            toast.style.display = "block";
+            setTimeout(()=>{
+                toast.style.display = "none";
+            },2000);
+        }
     </script>
 </body>
-</html>  
+</html>
